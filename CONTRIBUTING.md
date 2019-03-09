@@ -6,7 +6,7 @@ When contributing to this repository, please first discuss that new features be 
 
 Please report any bugs to the issues page, due to the fact this project is done in free time, it may take a while to process the issues, but security vulnerabilities will have precedence over feature requests.
 
-Please note we have a code of conduct [CODE\_OF\_CONDUCT.md](CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
+Please note we have a code of conduct, [CODE\_OF\_CONDUCT.md](CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
 # Pull Request Process
 
