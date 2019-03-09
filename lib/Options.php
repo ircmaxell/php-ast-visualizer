@@ -7,17 +7,18 @@ use phpDocumentor\GraphViz\Graph;
 use phpDocumentor\GraphViz\Node as GraphNode;
 
 class Options {
-    private $graphOptions;
-    private $nodeOptions;
-    private $edgeOptions;
+    private $options = [
+        'graph' => [],
+        'node' => ['shape' => 'rect'],
+        'edge' => [],
+        'childEdge' => ['style' => 'dashed','arrowhead' => 'empty'],
+    ];
     private $name;
 
 
-    public function __construct(string $name, array $graphOptions = null, array $nodeOptions = null, array $edgeOptions = null) {
+    public function __construct(string $name, array $options = []) {
         $this->name = $name;
-        $this->graphOptions = $graphOptions ?? [];
-        $this->nodeOptions = $nodeOptions ?? ['shape' => 'rect'];
-        $this->edgeOptions = $edgeOptions ?? [];
+        $this->graphOptions = array_merge($this->options, $options);
     }
 
     public function getName(): string {
@@ -25,19 +26,26 @@ class Options {
     }
 
     public function graph(Graph $graph) {
-        foreach ($this->graphOptions as $name => $value) {
+        foreach ($this->options['graph'] as $name => $value) {
             $graph->{'set' . $name}($value);
         }
     }
 
     public function node(GraphNode $node) {
-        foreach ($this->nodeOptions as $name => $value) {
+        foreach ($this->options['node'] as $name => $value) {
             $node->{'set' . $name}($value);
         }
     }
 
+    public function childEdge(GraphEdge $edge) {
+        $this->edge($edge);
+        foreach ($this->options['childEdge'] as $name => $value) {
+            $edge->{'set' . $name}($value);
+        }
+    }
+
     public function edge(GraphEdge $edge) {
-        foreach ($this->edgeOptions as $name => $value) {
+        foreach ($this->options['edge'] as $name => $value) {
             $edge->{'set' . $name}($value);
         }
     }
