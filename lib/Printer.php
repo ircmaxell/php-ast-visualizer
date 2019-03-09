@@ -4,9 +4,9 @@ namespace PHPAstVisualizer;
 
 use PhpParser\Node;
 
-use phpDocumentor\GraphViz\Graph;
 use phpDocumentor\GraphViz\Edge as GraphEdge;
 use phpDocumentor\GraphViz\Node as GraphNode;
+
 class Printer {
     private $nodeMap;
     private $options;
@@ -33,15 +33,20 @@ class Printer {
         return $graph;
     }
 
-    private function parseArray(GraphNode $parent, array $nodes, string $name) {
+    private function parseArray(GraphNode $parent, array $nodes, string $name, int $minlen = 1) {
+        $sameRank = [];
         foreach ($nodes as $node) {
             if (!$node instanceof Node) {
                 continue;
             }
             $child = $this->parseNode($node);
-            $this->createEdge($parent, $child, $name);
+            $sameRank[] = $child;
+            $this->createEdge($parent, $child, $name, $minlen);
             $parent = $child;
             $name = 'next';
+        }
+        if (count($sameRank) > 1) {
+            $this->graph->addRanking('same', $sameRank);
         }
     }
 
@@ -53,22 +58,24 @@ class Printer {
             );
             $this->options->node($this->nodeMap[$node]);
             $this->graph->setNode($this->nodeMap[$node]);
-            foreach ($node->getSubNodeNames() as $name) {
+            $names = $node->getSubNodeNames();
+            foreach ($names as $name) {
                 $subNode = $node->$name;
                 if (is_object($subNode) && $subNode instanceof Node) {
                     $this->createEdge($this->nodeMap[$node], $this->parseNode($subNode), $name);
                 } elseif (is_array($subNode)) {
-                    $this->parseArray($this->nodeMap[$node], $subNode, $name);
+                    $this->parseArray($this->nodeMap[$node], $subNode, $name, count($names) === 1 ? 1 : 2);
                 }
             }
         }
         return $this->nodeMap[$node];
     }
 
-    private function createEdge(GraphNode $from, GraphNode $to, string $label) {
+    private function createEdge(GraphNode $from, GraphNode $to, string $label, int $minlen = 1) {
         $edge = new GraphEdge($from, $to);
         $this->options->edge($edge);
         $edge->setlabel($label);
+        $edge->setminlen($minlen);
         $this->graph->link($edge);
     }
 

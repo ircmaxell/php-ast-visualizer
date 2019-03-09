@@ -16,6 +16,7 @@ $printer = new PHPAstVisualizer\Printer;
 
 $graph = $printer->print($ast);
 
+echo (string) $graph;
 $graph->export('png', 'demo.png');
 
 function foo(string $a, int $b): void {
