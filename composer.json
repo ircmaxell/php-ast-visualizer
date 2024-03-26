@@ -13,9 +13,6 @@
         "nikic/php-parser": "^4.0",
         "phpdocumentor/graphviz": "^1.0.4"
     },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "*"
-    },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
