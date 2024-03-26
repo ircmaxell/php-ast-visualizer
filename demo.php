@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 use PhpParser\ParserFactory;
 
-$parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+$parser = (new ParserFactory)->createForHostVersion();
 
 try {
     $ast = $parser->parse(file_get_contents(__FILE__));
