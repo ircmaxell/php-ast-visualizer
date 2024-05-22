@@ -3,7 +3,7 @@
 namespace PHPAstVisualizer;
 
 use PhpParser\Node;
-
+use PhpParser\Node\Name;
 use phpDocumentor\GraphViz\Edge as GraphEdge;
 use phpDocumentor\GraphViz\Node as GraphNode;
 
@@ -91,6 +91,9 @@ class Printer {
                 $result[] = "{$name}: " . ($node->$name ? 'true' : 'false');
             } elseif (is_scalar($node->$name)) {
                 $result[] = "{$name}: {$node->$name}";
+            } elseif($node instanceof Name) {
+                $fullName = implode('\\', $node->parts);
+                $result[] = "name: $fullName";
             }
         }
         return $this->printNodeValue($node, ...$result);
